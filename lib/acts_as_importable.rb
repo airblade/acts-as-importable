@@ -25,8 +25,8 @@ module AMC
           find(id).import
         end
 
-        def import_all
-          all.each do |legacy_model|
+        def import_all(*args)
+          all(*args).each do |legacy_model|
             legacy_model.import
           end
         end
