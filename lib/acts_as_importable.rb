@@ -1,25 +1,25 @@
 module AMC
   module Acts
     module Importable
-      
+
       def self.included(base)
         base.extend(ClassMethods)
       end
-      
+
       module ClassMethods
-        
+
         def acts_as_importable(options = {})
           # Store the import target class with the legacy class
           write_inheritable_attribute :importable_to, options[:to]
-          
+
           # Don't extend or include twice. This will allow acts_as_importable to be called multiple times.
           # eg. once in a parent class and once again in the child class, where it can override some options.
           extend  AMC::Acts::Importable::SingletonMethods unless self.methods.include?('import') && self.methods.include?('import_all')
           include AMC::Acts::Importable::InstanceMethods unless self.included_modules.include?(AMC::Acts::Importable::InstanceMethods)
         end
-        
+
       end # ClassMethods
-      
+
       module SingletonMethods
         def import(id)
           find(id).import
@@ -30,7 +30,7 @@ module AMC
             legacy_model.import
           end
         end
-        
+
         # This requires a numeric primary key for the legacy tables
         def import_all_in_batches
           each do |legacy_model|
@@ -54,15 +54,15 @@ module AMC
         end
 
       end # SingletonMethods
-      
+
       module InstanceMethods
-        
+
         def import
           returning to_model do |new_model|
             if new_model
               new_model.legacy_id     = self.id         if new_model.respond_to?(:"legacy_id=")
               new_model.legacy_class  = self.class.to_s if new_model.respond_to?(:"legacy_class=")
-              
+
               if !new_model.save
                 p new_model.errors
                 # TODO log an error that the model failed to save
@@ -73,7 +73,7 @@ module AMC
           end
         end
       end # InstanceMethods
-      
+
     end
   end
 end
