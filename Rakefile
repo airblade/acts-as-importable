@@ -2,6 +2,9 @@ require 'rake'
 require 'spec/rake/spectask'
 require 'rake/rdoctask'
 
+require 'bundler'
+Bundler::GemHelper.install_tasks
+
 desc 'Default: run specs.'
 task :default => :spec
 
