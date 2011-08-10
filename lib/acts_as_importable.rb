@@ -64,7 +64,7 @@ module AMC
               new_model.legacy_class  = self.class.to_s if new_model.respond_to?(:"legacy_class=")
 
               if !new_model.save
-                p new_model.errors
+                puts "#{new_model.errors.full_messages} <#{class.name}:#{id}>"
               end
             end
           end
