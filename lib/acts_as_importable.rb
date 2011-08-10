@@ -32,8 +32,8 @@ module AMC
         end
 
         # This requires a numeric primary key for the legacy tables
-        def import_all_in_batches
-          each do |legacy_model|
+        def import_all_in_batches(*args)
+          find_each(*args) do |legacy_model|
             legacy_model.import
           end
         end
@@ -64,7 +64,7 @@ module AMC
               new_model.legacy_class  = self.class.to_s if new_model.respond_to?(:"legacy_class=")
 
               if !new_model.save
-                puts "#{new_model.errors.full_messages} <#{class.name}:#{id}>"
+                puts "#{new_model.errors.full_messages} <#{self.class.name}:#{id}>"
               end
             end
           end
@@ -75,5 +75,4 @@ module AMC
   end
 end
 
-require 'core_extensions'
 ActiveRecord::Base.class_eval { include AMC::Acts::Importable }
