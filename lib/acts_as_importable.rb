@@ -40,7 +40,7 @@ module AMC
 
         def lookup(id)
           lookup_class = read_inheritable_attribute(:importable_to) || "#{self.to_s.split('::').last}"
-          lookups[id] ||= Kernel.const_get(lookup_class).first(:conditions => {:legacy_id => id, :legacy_class => self.to_s}).try(:id__)
+          lookups[id] ||= Kernel.const_get(lookup_class).first(:conditions => {:legacy_id => id, :legacy_class => self.to_s}).try(:id)
         end
 
         def flush_lookups!
